@@ -2,17 +2,17 @@ import { useQuery } from "@tanstack/react-query"
 
 import { client } from "@/lib/rpc"
 
-interface UseGetServicesProps {
+interface UseGetServersProps {
   profileId: string
 }
 
-export const useGetServices = ({ profileId }: UseGetServicesProps) => {
+export const useGetServers = ({ profileId }: UseGetServersProps) => {
   const query = useQuery({
-    queryKey: ['services'],
+    queryKey: ['servers', profileId],
     queryFn: async () => {
       if (!profileId) return null
 
-      const response = await client.api.services.$get({
+      const response = await client.api.servers.$get({
         query: {
           profileId
         }

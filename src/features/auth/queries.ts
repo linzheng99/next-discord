@@ -1,4 +1,6 @@
-import { currentUser } from "@clerk/nextjs/server"
+import { auth, currentUser } from "@clerk/nextjs/server"
+
+import db from "@/lib/db"
 
 export async function getCurrent() {
   try {
@@ -8,4 +10,18 @@ export async function getCurrent() {
     console.log(error)
     return null
   }
+}
+
+export async function getCurrentProfile() {
+  const { userId } = await auth()
+
+  if (!userId) return null
+
+  const profile = await db.profile.findUnique({
+    where: {
+      userId
+    }
+  })
+
+  return profile
 }

@@ -1,7 +1,8 @@
 import { redirect } from 'next/navigation';
 
 import { getProfile } from '@/features/auth/actions/profile';
-import { getFirstServer } from '@/features/services/queries';
+import CreateServerForm from '@/features/servers/components/create-server-form';
+import { getFirstServer } from '@/features/servers/queries';
 
 export default async function SetUpPage() {
   const profile = await getProfile()
@@ -12,5 +13,5 @@ export default async function SetUpPage() {
     redirect(`/servers/${server.id}`)
   }
 
-  return <div>{JSON.stringify(profile)}</div>
+  return <CreateServerForm />
 }
