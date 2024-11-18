@@ -6,6 +6,7 @@ import {
 import type { Metadata } from "next";
 import { Open_Sans } from 'next/font/google'
 
+import QueryProvider from "@/components/providers/query-provider";
 import { ThemeProvider } from "@/components/providers/theme-provider"
 import { cn } from "@/lib/utils";
 
@@ -29,14 +30,16 @@ export default function RootLayout({
         <body
           className={cn(`${font.className}`, 'dark:bg-[#313338]')}
         >
-          <ThemeProvider
-            attribute="class"
-            defaultTheme="system"
-            enableSystem
-            disableTransitionOnChange
-          >
-            {children}
-          </ThemeProvider>
+          <QueryProvider>
+            <ThemeProvider
+              attribute="class"
+              defaultTheme="system"
+              enableSystem
+              disableTransitionOnChange
+            >
+              {children}
+            </ThemeProvider>
+          </QueryProvider>
         </body>
       </html>
     </ClerkProvider>

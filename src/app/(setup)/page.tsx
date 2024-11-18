@@ -1,12 +1,12 @@
 import { redirect } from 'next/navigation';
 
-import { getProfile } from '@/features/auth/server/actions/profile';
-import { getServer } from '@/features/services/queries';
+import { getProfile } from '@/features/auth/actions/profile';
+import { getFirstServer } from '@/features/services/queries';
 
 export default async function SetUpPage() {
   const profile = await getProfile()
 
-  const server = await getServer(profile.id)
+  const server = await getFirstServer(profile.id)
 
   if (server) {
     redirect(`/servers/${server.id}`)
