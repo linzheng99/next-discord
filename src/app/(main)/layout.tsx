@@ -1,17 +1,15 @@
 import NavigationSidebar from "@/components/navigation/navigation-sidebar";
-import { getCurrentProfile } from "@/features/auth/queries";
 
-export default async function MainLayout({ children }: { children: React.ReactNode }) {
-  const profile = await getCurrentProfile()
-
-  if (!profile) return null
+export default function MainLayout({ children }: { children: React.ReactNode }) {
 
   return (
-    <div className="h-full">
-      <div className="h-full w-full md:w-[72px] dark:bg-[#2b2b37] bg-[#e5e5e5] flex-col fixed inset-y-0">
-        <NavigationSidebar profileId={profile.id} />
+    <div className="min-h-screen">
+      <div className="flex w-full h-full">
+        <div className="hidden fixed left-0 top-0 md:block md:w-[72px] h-full overflow-y-auto">
+          <NavigationSidebar />
+        </div>
+        <main className="h-full md:pl-[72px]">{children}</main>
       </div>
-      <main className="h-full md:pl-[72px]">{children}</main>
     </div>
   )
 }

@@ -4,21 +4,11 @@ import { useQuery } from "@tanstack/react-query"
 
 import { client } from "@/lib/rpc"
 
-interface UseGetServersProps {
-  profileId: string
-}
-
-export const useGetServers = ({ profileId }: UseGetServersProps) => {
+export const useGetServers = () => {
   const query = useQuery({
-    queryKey: ['servers', profileId],
+    queryKey: ['servers'],
     queryFn: async () => {
-      if (!profileId) return null
-
-      const response = await client.api.servers.$get({
-        query: {
-          profileId
-        }
-      })
+      const response = await client.api.servers.$get()
 
       if (!response.ok) {
         throw new Error('获取服务失败...')

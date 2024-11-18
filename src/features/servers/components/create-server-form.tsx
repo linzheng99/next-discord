@@ -3,6 +3,7 @@
 import "@uploadthing/react/styles.css"
 
 import { zodResolver } from "@hookform/resolvers/zod"
+import { useRouter } from "next/navigation"
 import { useForm } from "react-hook-form"
 import { type z } from "zod"
 
@@ -30,6 +31,8 @@ import { useCreateServer } from "../api/use-create-server"
 import { createServerSchema } from "../schemas"
 
 export default function CreateServerForm() {
+  const router = useRouter()
+
   const form = useForm<z.infer<typeof createServerSchema>>({
     resolver: zodResolver(createServerSchema),
     defaultValues: {
@@ -44,6 +47,7 @@ export default function CreateServerForm() {
     mutate({ json: values }, {
       onSuccess: () => {
         form.reset()
+        router.push(`/`)
       }
     })
   }

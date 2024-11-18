@@ -12,13 +12,8 @@ import { useGetServers } from "@/features/servers/api/use-get-services"
 import NavigationAction from "./navigation-action"
 import NavigationItem from "./navigation-item"
 
-interface NavigationSidebarProps {
-  profileId: string
-}
-
-export default function NavigationSidebar({ profileId }: NavigationSidebarProps) {
-  const { data: servers, isLoading: isLoadingServers } = useGetServers({ profileId })
-  console.log('servers', servers)
+export default function NavigationSidebar() {
+  const { data: servers, isLoading: isLoadingServers } = useGetServers()
 
   if (isLoadingServers) {
     return <PageLoader />
@@ -29,7 +24,7 @@ export default function NavigationSidebar({ profileId }: NavigationSidebarProps)
   }
 
   return (
-    <div className="space-y-4 flex flex-col items-center h-full text-primary w-full dark:bg-[#2b2b37] bg-[#e5e5e5] py-3">
+    <div className="space-y-4 py-3 flex flex-col w-full h-full text-primary dark:bg-[#2b2b37] bg-[#e5e5e5]">
       <NavigationAction />
       <Separator className="w-10 h-[2px] bg-zinc-300 dark:bg-zinc-700 mx-auto" />
       <ScrollArea className="flex-1 w-full">

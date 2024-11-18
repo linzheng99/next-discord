@@ -1,10 +1,14 @@
 import db from '@/lib/db';
 
-export const getFirstServer = async (profileId: string) => {
-  const server = await db.server.findFirst({
+export const getServers = async (profileId: string) => {
+  const servers = await db.server.findMany({
     where: {
-      profileId,
+      members: {
+        some: {
+          profileId
+        }
+      }
     },
   })
-  return server
+  return servers
 }

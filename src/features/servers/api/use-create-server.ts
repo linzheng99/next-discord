@@ -22,11 +22,11 @@ export const useCreateServer = () => {
 
       return await response.json()
     },
-    onSuccess: ({ data }) => {
+    onSuccess: () => {
       toast.success('创建成功！')
 
       router.refresh()
-      void queryClient.invalidateQueries({ queryKey: ['servers', data.profileId] })
+      // void queryClient.invalidateQueries({ queryKey: ['servers'] })
     },
     onError: (error) => {
       toast.error(error.message)
