@@ -26,7 +26,7 @@ export const useCreateServer = () => {
       toast.success('创建成功！')
 
       router.refresh()
-      // void queryClient.invalidateQueries({ queryKey: ['servers'] })
+      void queryClient.invalidateQueries({ queryKey: ['servers'] })
     },
     onError: (error) => {
       toast.error(error.message)

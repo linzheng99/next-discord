@@ -1,14 +1,16 @@
 import NavigationSidebar from "@/components/navigation/navigation-sidebar";
+import CreateServerModel from '@/features/servers/components/create-server-model'
 
 export default function MainLayout({ children }: { children: React.ReactNode }) {
 
   return (
-    <div className="min-h-screen">
-      <div className="flex w-full h-full">
-        <div className="hidden fixed left-0 top-0 md:block md:w-[72px] h-full overflow-y-auto">
+    <div className="h-full">
+      <CreateServerModel />
+      <div className="flex h-full">
+        <div className="hidden md:!flex w-[72px] z-30 flex-col fixed inset-y-0">
           <NavigationSidebar />
         </div>
-        <main className="h-full md:pl-[72px]">{children}</main>
+        <main className="h-full md:pl-[72px] flex-1">{children}</main>
       </div>
     </div>
   )

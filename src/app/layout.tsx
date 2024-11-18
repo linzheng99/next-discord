@@ -31,17 +31,17 @@ export default function RootLayout({
         <body
           className={cn(`${font.className}`, 'dark:bg-[#313338]')}
         >
-          <QueryProvider>
-            <ThemeProvider
-              attribute="class"
-              defaultTheme="system"
-              enableSystem
-              disableTransitionOnChange
-            >
+          <ThemeProvider
+            attribute="class"
+            defaultTheme="system"
+            enableSystem
+            disableTransitionOnChange
+          >
+            <QueryProvider>
               <Toaster />
               {children}
-            </ThemeProvider>
-          </QueryProvider>
+            </QueryProvider>
+          </ThemeProvider>
         </body>
       </html>
     </ClerkProvider>

@@ -22,7 +22,7 @@ export default function NavigationItem({ id, imageUrl, name }: NavigationItemPro
   }
 
   return (
-    <div>
+    <div className="mb-4">
       <ActionTooltip label={name} side="right" align="center">
         <button className="group relative flex items-center" onClick={() => onClick(id)}>
           <div className={cn(`absolute left-0 bg-primary rounded-r-full transition-all w-[4px]`, id === serverId ? "h-[36px]" : "h-[8px]", id !== serverId && "group-hover:h-[20px]")}>

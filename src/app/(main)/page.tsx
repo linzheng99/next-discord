@@ -1,6 +1,7 @@
 import { redirect } from 'next/navigation';
 
 import { getProfile } from '@/features/auth/actions/profile';
+import InitialServerForm from '@/features/servers/components/initial-server-form';
 import { getServers } from '@/features/servers/queries';
 
 export default async function SetUpPage() {
@@ -10,8 +11,8 @@ export default async function SetUpPage() {
 
   if (servers.length) {
     redirect(`/servers/${servers[0].id}`)
-  } else {
-    redirect('/servers/create')
-  }
+  } 
+
+  return <InitialServerForm />
 
 }
