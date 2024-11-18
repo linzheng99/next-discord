@@ -5,7 +5,7 @@ import { toast } from 'sonner'
 
 import { client } from '@/lib/rpc'
 
-type ResponseType = InferResponseType<typeof client.api.servers['$post']>
+type ResponseType = InferResponseType<typeof client.api.servers['$post'], 200>
 type RequestType = InferRequestType<typeof client.api.servers['$post']>
 
 export const useCreateServer = () => {
@@ -22,11 +22,11 @@ export const useCreateServer = () => {
 
       return await response.json()
     },
-    onSuccess: () => {
+    onSuccess: ({ data }) => {
       toast.success('创建成功！')
 
       router.refresh()
-      void queryClient.invalidateQueries({ queryKey: ['servers'] })
+      void queryClient.invalidateQueries({ queryKey: ['servers', data.profileId] })
     },
     onError: (error) => {
       toast.error(error.message)

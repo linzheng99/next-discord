@@ -2,7 +2,6 @@ import { zValidator } from '@hono/zod-validator';
 import { MemberRole } from '@prisma/client';
 import { Hono } from "hono";
 import { v4 as uuidv4 } from 'uuid'
-import { z } from "zod";
 
 import { getCurrentProfile } from '@/features/auth/queries';
 import db from "@/lib/db";
@@ -40,21 +39,22 @@ const app = new Hono()
 
     return c.json({ data: server })
   })
-  .get(
-    '/',
-    zValidator('query', z.object({
-      profileId: z.string()
-    })),
-    async (c) => {
-      const { profileId } = c.req.valid('query')
+  .get('/', async (c) => {
+    const profile = await getCurrentProfile()
 
-      const servers = await db.server.findMany({
-        where: {
-          profileId
+    if (!profile) {
+      return c.json({ error: 'Unauthorized' }, 401)
+    }
+
+    const servers = await db.server.findMany({
+      where: {
+        members: {
+          some: { profileId: profile.id }
         }
-      })
-
-      return c.json({ data: servers })
+      }
     })
+
+    return c.json({ data: servers })
+  })
 
 export default app

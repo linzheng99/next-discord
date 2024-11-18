@@ -1,29 +1,35 @@
+'use client'
+
 import { UserButton } from "@clerk/nextjs"
 
 import { ModeToggle } from "@/components/mode-toggle"
+import PageError from "@/components/page-error"
+import PageLoader from "@/components/page-loader"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Separator } from "@/components/ui/separator"
-import { getCurrentProfile } from "@/features/auth/queries"
-import db from "@/lib/db"
+import { useGetServers } from "@/features/servers/api/use-get-services"
 
 import NavigationAction from "./navigation-action"
 import NavigationItem from "./navigation-item"
 
-export default async function NavigationSidebar() {
-  const profile = await getCurrentProfile()
+interface NavigationSidebarProps {
+  profileId: string
+}
 
-  if (!profile) return null
+export default function NavigationSidebar({ profileId }: NavigationSidebarProps) {
+  const { data: servers, isLoading: isLoadingServers } = useGetServers({ profileId })
+  console.log('servers', servers)
 
-  const servers = await db.server.findMany({
-    where: {
-      members: {
-        some: { profileId: profile.id }
-      }
-    }
-  })
+  if (isLoadingServers) {
+    return <PageLoader />
+  }
+
+  if (!servers) {
+    return <PageError message="服务器数据获取失败..." />
+  }
 
   return (
-    <div className="space-y-4 flex flex-col items-center h-full text-primary w-full bg-[#2b2b37] py-3">
+    <div className="space-y-4 flex flex-col items-center h-full text-primary w-full dark:bg-[#2b2b37] bg-[#e5e5e5] py-3">
       <NavigationAction />
       <Separator className="w-10 h-[2px] bg-zinc-300 dark:bg-zinc-700 mx-auto" />
       <ScrollArea className="flex-1 w-full">
