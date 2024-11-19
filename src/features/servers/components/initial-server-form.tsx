@@ -44,7 +44,6 @@ export default function InitialServerForm() {
     mutate({ json: values }, {
       onSuccess: () => {
         form.reset()
-        window.location.reload()
       }
     })
   }

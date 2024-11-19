@@ -8,6 +8,7 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { useModalStore } from "@/hooks/use-modal-store"
 
 import { type ServerWithMembersWithProfiles } from "../types"
 
@@ -19,6 +20,7 @@ interface ServerHeaderProps {
 export default function ServerHeader({ server, role }: ServerHeaderProps) {
   const isAdmin = role === MemberRole.ADMIN
   const isModerator = isAdmin || role === MemberRole.MODERATOR
+  const { onOpen } = useModalStore()
 
   return (
     <DropdownMenu>
@@ -31,7 +33,7 @@ export default function ServerHeader({ server, role }: ServerHeaderProps) {
       <DropdownMenuContent className="w-56 text-sm text-black dark:text-neutral-400 space-y-[2px]">
         {
           isModerator && (
-            <DropdownMenuItem className="text-indigo-500 dark:text-indigo-400 px-3 py-2 flex items-center hover:!text-indigo-500">
+            <DropdownMenuItem className="text-indigo-500 dark:text-indigo-400 px-3 py-2 flex items-center hover:!text-indigo-500" onClick={() => onOpen('invite', { server })}>
               Invite People
               <UserPlus className="w-4 h-4 ml-auto" />
             </DropdownMenuItem>

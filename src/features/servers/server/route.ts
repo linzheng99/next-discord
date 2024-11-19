@@ -88,5 +88,26 @@ const app = new Hono()
 
     return c.json({ data: server })
   })
+  .patch('/:serverId/invite-code', async (c) => {
+    const profile = await getCurrentProfile()
 
+    if (!profile) {
+      return c.json({ error: 'Unauthorized' }, 401)
+    }
+
+    const { serverId } = c.req.param()
+
+    const server = await db.server.update({
+      where: {
+        id: serverId,
+        profileId: profile.id
+      },
+      data: {
+        inviteCode: uuidv4()
+      }
+    })
+
+    return c.json({ data: server })
+
+  })
 export default app
