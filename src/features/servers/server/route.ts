@@ -3,7 +3,7 @@ import { MemberRole } from '@prisma/client';
 import { Hono } from "hono";
 import { v4 as uuidv4 } from 'uuid'
 
-import { getCurrentProfile } from '@/lib/current-profile';
+import { getCurrent, getCurrentProfile } from '@/lib/current-profile';
 import db from "@/lib/db";
 
 import { createServerSchema } from '../schemas';
@@ -55,6 +55,38 @@ const app = new Hono()
     })
 
     return c.json({ data: servers })
+  })
+  .get('/:serverId', async (c) => {
+    const user = await getCurrent()
+
+    if (!user) {
+      return c.json({ error: 'Unauthorized' }, 401)
+    }
+
+    const { serverId } = c.req.param()
+
+    const server = await db.server.findUnique({
+      where: {
+        id: serverId,
+      },
+      include: {
+        channels: {
+          orderBy: {
+            createdAt: 'asc'
+          }
+        },
+        members: {
+          include: {
+            profile: true
+          },
+          orderBy: {
+            role: 'asc'
+          }
+        }
+      }
+    })
+
+    return c.json({ data: server })
   })
 
 export default app

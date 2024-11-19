@@ -7,7 +7,7 @@ import PageError from "@/components/page-error"
 import PageLoader from "@/components/page-loader"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { Separator } from "@/components/ui/separator"
-import { useGetServers } from "@/features/servers/api/use-get-services"
+import { useGetServers } from "@/features/servers/api/use-get-servers"
 
 import NavigationAction from "./navigation-action"
 import NavigationItem from "./navigation-item"
@@ -24,7 +24,7 @@ export default function NavigationSidebar() {
   }
 
   return (
-    <div className="space-y-4 py-3 flex lg:hidden flex-col w-full h-full text-primary dark:bg-[#2b2b37] bg-[#e5e5e5]">
+    <div className="space-y-4 py-3 flex lg:hidden flex-col w-full h-full text-primary dark:bg-[#1E1F22] bg-[#E3E5E8]">
       <NavigationAction />
       <Separator className="w-10 h-[2px] bg-zinc-300 dark:bg-zinc-700 mx-auto" />
       <ScrollArea className="flex-1 w-full">
