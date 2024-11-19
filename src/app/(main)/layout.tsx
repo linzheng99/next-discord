@@ -1,5 +1,5 @@
 import NavigationSidebar from "@/components/navigation/navigation-sidebar";
-import CreateServerModel from '@/features/servers/components/create-server-model'
+import CreateServerModel from '@/features/servers/components/create-server-modal'
 
 export default function MainLayout({ children }: { children: React.ReactNode }) {
 

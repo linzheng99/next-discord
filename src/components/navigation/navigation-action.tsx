@@ -3,10 +3,10 @@
 import { Plus } from "lucide-react"
 
 import ActionTooltip from "@/components/action-tooltip"
-import { useModelStore } from "@/hooks/use-model-store"
+import { useModalStore } from "@/hooks/use-modal-store"
 
 export default function NavigationAction() {
-  const { onOpen } = useModelStore()
+  const { onOpen } = useModalStore()
 
   return (
     <div>

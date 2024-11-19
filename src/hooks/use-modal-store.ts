@@ -1,15 +1,16 @@
 import { create } from 'zustand'
 
-export type ModelType = 'createServer'
+export type ModalType = 'createServer'
 
-interface ModelStore {
-  type: ModelType | null
+
+interface ModalStore {
+  type: ModalType | null
   isOpen: boolean
-  onOpen: (type: ModelType) => void
+  onOpen: (type: ModalType) => void
   onClose: () => void
 }
 
-export const useModelStore = create<ModelStore>((set) => ({
+export const useModalStore = create<ModalStore>((set) => ({
   type: null,
   isOpen: false,
   onOpen: (type) => set({ type, isOpen: true }),
