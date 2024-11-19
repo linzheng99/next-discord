@@ -1,7 +1,7 @@
 "use client"
 
 import ResponsiveModel from "@/components/responsive-model";
-import { useModelStore } from "~/hooks/use-model-store";
+import { useModelStore } from "@/hooks/use-model-store";
 
 import CreateServerForm from "./create-server-form";
 

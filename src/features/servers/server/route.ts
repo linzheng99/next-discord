@@ -3,7 +3,7 @@ import { MemberRole } from '@prisma/client';
 import { Hono } from "hono";
 import { v4 as uuidv4 } from 'uuid'
 
-import { getCurrentProfile } from '@/features/auth/queries';
+import { getCurrentProfile } from '@/lib/current-profile';
 import db from "@/lib/db";
 
 import { createServerSchema } from '../schemas';

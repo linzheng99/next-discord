@@ -1,9 +1,9 @@
 import { redirect } from 'next/navigation';
 
-import { getCurrent } from '@/features/auth/queries';
+import { getCurrent } from '@/lib/current-profile';
 import db from '@/lib/db';
 
-export async function getProfile() {
+export async function getOrCreateProfile() {
   const user = await getCurrent()
 
   if (!user) {

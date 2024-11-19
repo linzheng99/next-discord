@@ -1,11 +1,11 @@
 import { redirect } from 'next/navigation';
 
-import { getProfile } from '@/features/auth/actions/profile';
+import { getOrCreateProfile } from '@/features/auth/utils';
 import InitialServerForm from '@/features/servers/components/initial-server-form';
 import { getServers } from '@/features/servers/queries';
 
 export default async function SetUpPage() {
-  const profile = await getProfile()
+  const profile = await getOrCreateProfile()
 
   const servers = await getServers(profile.id)
 
