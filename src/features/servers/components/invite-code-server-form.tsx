@@ -19,7 +19,7 @@ export default function InviteCodeServerForm() {
   const origin = useOrigin()
   const serverId = useServerId()
   const { data: { server } } = useModalStore()
-  const inviteLink = `${origin}/invite/${server?.inviteCode}`
+  const inviteLink = `${origin}/servers/${server?.id}/invite/${server?.inviteCode}`
 
   const [isCopied, setIsCopied] = useState(false)
   const { mutate, isPending } = useResetInviteCode()

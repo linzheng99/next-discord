@@ -2,6 +2,7 @@ import { zValidator } from '@hono/zod-validator';
 import { MemberRole } from '@prisma/client';
 import { Hono } from "hono";
 import { v4 as uuidv4 } from 'uuid'
+import { z } from 'zod';
 
 import { getCurrent, getCurrentProfile } from '@/lib/current-profile';
 import db from "@/lib/db";
@@ -108,6 +109,46 @@ const app = new Hono()
     })
 
     return c.json({ data: server })
-
   })
+  .post('/:serverId/join',
+    zValidator('json', z.object({ inviteCode: z.string() })),
+    async (c) => {
+      const profile = await getCurrentProfile()
+
+      if (!profile) {
+        return c.json({ error: 'Unauthorized' }, 401)
+      }
+
+      const { serverId } = c.req.param()
+      const { inviteCode } = c.req.valid('json')
+
+      const existingServer = await db.server.findUnique({
+        where: {
+          id: serverId,
+          inviteCode,
+          members: {
+            some: { profileId: profile.id }
+          }
+        }
+      })
+
+      if (existingServer) {
+        return c.json({ error: 'Server already joined' }, 400)
+      }
+
+      const server = await db.server.update({
+        where: {
+          id: serverId,
+          inviteCode
+        },
+        data: {
+          members: {
+            create: { profileId: profile.id }
+          }
+        }
+      })
+
+      return c.json({ data: server })
+    })
+
 export default app
