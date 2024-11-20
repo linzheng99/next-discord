@@ -26,6 +26,7 @@ import {
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { useModalStore } from "@/hooks/use-modal-store"
 
+import { useMemberDeleteServer } from "../api/use-member-delete-server"
 import { useMemberRoleServer } from "../api/use-member-role-server"
 import { useServerId } from "../hooks/use-server-id"
 import { type ServerWithMembersWithProfiles } from "../types"
@@ -45,6 +46,7 @@ export default function MembersServerForm() {
   const { server } = data as { server: ServerWithMembersWithProfiles }
 
   const { mutate: updateMemberRole } = useMemberRoleServer()
+  const { mutate: deleteMember } = useMemberDeleteServer()
   const [loadingId, setLoadingId] = useState('')
 
   function handleMemberRole(memberId: string, role: MemberRole) {
@@ -63,6 +65,19 @@ export default function MembersServerForm() {
     )
   }
 
+  function handleMemberDelete(memberId: string) {
+    setLoadingId(memberId)
+    deleteMember(
+      { param: { serverId, memberId } },
+      {
+        onSuccess: ({ data }) => {
+          onOpen('members', { server: data as unknown as ServerWithMembersWithProfiles })
+          setLoadingId('')
+        },
+        onError: () => setLoadingId('')
+      }
+    )
+  }
 
   return (
     <Card className="w-full">
@@ -115,7 +130,7 @@ export default function MembersServerForm() {
                           </DropdownMenuPortal>
                         </DropdownMenuSub>
                         <DropdownMenuSeparator />
-                        <DropdownMenuItem className="text-rose-500">
+                        <DropdownMenuItem className="text-rose-500" onClick={() => handleMemberDelete(member.id)}>
                           <Gavel className="w-4 h-4 mr-2" />
                           Kick
                         </DropdownMenuItem>
