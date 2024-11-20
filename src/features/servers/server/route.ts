@@ -339,5 +339,23 @@ const app = new Hono()
 
     return c.json({ data: server })
   })
+  .delete('/:serverId', async (c) => {
+    const profile = await getCurrentProfile()
+
+    if (!profile) {
+      return c.json({ error: 'Unauthorized' }, 401)
+    }
+
+    const { serverId } = c.req.param()
+
+    const server = await db.server.delete({
+      where: {
+        id: serverId,
+        profileId: profile.id
+      }
+    })
+
+    return c.json({ data: server })
+  })
 
 export default app

@@ -12,6 +12,7 @@ import {
 import { useConfirm } from "@/hooks/use-confirm"
 import { useModalStore } from "@/hooks/use-modal-store"
 
+import { useDeleteServer } from "../api/use-delete-server"
 import { useLeaveServer } from "../api/use-leave-server"
 import { useServerId } from "../hooks/use-server-id"
 import { type ServerWithMembersWithProfiles } from "../types"
@@ -28,9 +29,12 @@ export default function ServerHeader({ server, role }: ServerHeaderProps) {
   const isModerator = isAdmin || role === MemberRole.MODERATOR
   const { onOpen } = useModalStore()
 
-  const [LeaveServerDialog, confirmLeaveServer] = useConfirm('Leave Server', 'Are you sure you want to leave this server?', 'destructive')
+  const [LeaveServerDialog, confirmLeaveServer] = useConfirm(`Leave ${server.name}`, `Are you sure you want to leave this server? This action cannot be undone.`, 'destructive')
+  const [DeleteServerDialog, confirmDeleteServer] = useConfirm(`Delete ${server.name}`, `Are you sure you want to delete this server? This action cannot be undone.`, 'destructive')
+
 
   const { mutate: leaveServer } = useLeaveServer()
+  const { mutate: deleteServer } = useDeleteServer()
 
   async function handleLeaveServer() {
     const ok = await confirmLeaveServer()
@@ -43,9 +47,21 @@ export default function ServerHeader({ server, role }: ServerHeaderProps) {
     })
   }
 
+  async function handleDeleteServer() {
+    const ok = await confirmDeleteServer()
+    if (!ok) return
+
+    deleteServer({ param: { serverId } }, {
+      onSuccess: () => {
+        router.push('/')
+      }
+    })
+  }
+
   return (
     <>
       <LeaveServerDialog />
+      <DeleteServerDialog />
       <DropdownMenu>
         <DropdownMenuTrigger asChild>
           <button className="w-full text-md font-semibold px-3 flex items-center h-12 border-neutral-200 dark:border-neutral-800 border-b-2 hover:bg-zinc-700/10 dark:hover:bg-zinc-700/50 transition">
@@ -93,7 +109,7 @@ export default function ServerHeader({ server, role }: ServerHeaderProps) {
           }
           {
             isAdmin && (
-              <DropdownMenuItem className="px-3 py-2 flex items-center text-red-500 dark:text-red-400 hover:!text-red-500">
+              <DropdownMenuItem className="px-3 py-2 flex items-center text-red-500 dark:text-red-400 hover:!text-red-500" onClick={() => handleDeleteServer()}>
                 Delete Server
                 <Trash className="w-4 h-4 ml-auto" />
               </DropdownMenuItem>
