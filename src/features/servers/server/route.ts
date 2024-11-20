@@ -7,7 +7,7 @@ import { z } from 'zod';
 import { getCurrent, getCurrentProfile } from '@/lib/current-profile';
 import db from "@/lib/db";
 
-import { createServerSchema, editServerSchema } from '../schemas';
+import { createChannelSchema, createServerSchema, editServerSchema } from '../schemas';
 
 const app = new Hono()
   .post('/', zValidator('json', createServerSchema), async (c) => {
@@ -264,7 +264,45 @@ const app = new Hono()
     })
 
     return c.json({ data: server })
+  })
+  .post('/:serverId/channels', zValidator('json', createChannelSchema), async (c) => {
+    const profile = await getCurrentProfile()
 
+    if (!profile) {
+      return c.json({ error: 'Unauthorized' }, 401)
+    }
+
+    const { serverId } = c.req.param()
+    const { name, type } = c.req.valid('json')
+
+    if (!name || !type) {
+      return c.json({ error: 'Name or type are required' }, 400)
+    }
+
+    if (name === 'general') {
+      return c.json({ error: 'Name cannot be "general"' }, 400)
+    }
+
+    const server = await db.server.update({
+      where: {
+        id: serverId,
+        members: {
+          some: {
+            profileId: profile.id,
+            role: {
+              in: [MemberRole.ADMIN, MemberRole.MODERATOR]
+            }
+          }
+        }
+      },
+      data: {
+        channels: {
+          create: [ { name, type, profileId: profile.id } ]
+        }
+      }
+    })
+
+    return c.json({ data: server })
   })
 
 export default app
