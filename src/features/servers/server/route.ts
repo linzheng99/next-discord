@@ -143,9 +143,11 @@ const app = new Hono()
         },
         data: {
           members: {
-            create: { profileId: profile.id }
+            create: [
+              { profileId: profile.id }
+            ]
           }
-        }
+        },
       })
 
       return c.json({ data: server })

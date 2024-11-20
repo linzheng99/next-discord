@@ -23,7 +23,7 @@ export async function getOrCreateProfile() {
   const newProfile = await db.profile.create({
     data: {
       userId: user.id,
-      name: `${user.firstName} ${user.lastName}`,
+      name: user.firstName && user.lastName ? `${user.firstName} ${user.lastName}` : user.emailAddresses[0].emailAddress ?? '',
       imageUrl: user.imageUrl,
       email: user.emailAddresses[0].emailAddress,
     },
