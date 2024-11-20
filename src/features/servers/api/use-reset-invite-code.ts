@@ -15,13 +15,13 @@ export const useResetInviteCode = () => {
       const response = await client.api.servers[':serverId']['invite-code']['$patch']({ param })
 
       if (!response.ok) {
-        throw new Error('重置失败...')
+        throw new Error('request error...')
       }
 
       return await response.json()
     },
     onSuccess: ({ data }) => {
-      toast.success('重置成功！')
+      toast.success('success！')
 
       void queryClient.invalidateQueries({ queryKey: ['servers'] })
       void queryClient.invalidateQueries({ queryKey: ['servers', data.id] })

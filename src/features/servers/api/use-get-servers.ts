@@ -9,7 +9,7 @@ export const useGetServers = () => {
       const response = await client.api.servers.$get()
 
       if (!response.ok) {
-        throw new Error('获取服务失败...')
+        throw new Error('request error...')
       }
 
       const { data } = await response.json()

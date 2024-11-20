@@ -15,13 +15,13 @@ export const useJoinServer = () => {
       const response = await client.api.servers[':serverId']['join']['$post']({ param, json })
 
       if (!response.ok) {
-        throw new Error('加入失败...')
+        throw new Error('request error...')
       }
 
       return await response.json()
     },
     onSuccess: ({ data }) => {
-      toast.success('加入成功！')
+      toast.success('success！')
 
       void queryClient.invalidateQueries({ queryKey: ['servers'] })
       void queryClient.invalidateQueries({ queryKey: ['servers', data.id] })

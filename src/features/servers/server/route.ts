@@ -297,7 +297,42 @@ const app = new Hono()
       },
       data: {
         channels: {
-          create: [ { name, type, profileId: profile.id } ]
+          create: [{ name, type, profileId: profile.id }]
+        }
+      }
+    })
+
+    return c.json({ data: server })
+  })
+  .patch('/:serverId/leave-server', async (c) => {
+    const profile = await getCurrentProfile()
+
+    if (!profile) {
+      return c.json({ error: 'Unauthorized' }, 401)
+    }
+
+    const { serverId } = c.req.param()
+
+    const server = await db.server.update({
+      where: {
+        id: serverId,
+        // 不能离开自己创建的服务器
+        profileId: {
+          not: profile.id
+        },
+        // 找到包含当前用户的成员
+        members: {
+          some: {
+            profileId: profile.id
+          }
+        }
+      },
+      data: {
+        members: {
+          // 删除当前用户
+          deleteMany: {
+            profileId: profile.id
+          }
         }
       }
     })

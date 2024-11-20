@@ -16,13 +16,13 @@ export const useMemberDeleteServer = () => {
       const response = await client.api.servers[':serverId']['members'][':memberId']['$delete']({ param })
 
       if (!response.ok) {
-        throw new Error('删除失败...')
+        throw new Error('request error...')
       }
 
       return await response.json()
     },
     onSuccess: ({ data }) => {
-      toast.success('删除成功！')
+      toast.success('success！')
 
       void queryClient.invalidateQueries({ queryKey: ['servers'] })
       void queryClient.invalidateQueries({ queryKey: ['servers', data.id] })

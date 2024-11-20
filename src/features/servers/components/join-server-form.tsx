@@ -45,19 +45,19 @@ export default function JoinServerForm({ initialValues }: JoinServerFormProps) {
   return (
     <Card className="w-full">
       <CardHeader>
-        <CardTitle>加入服务器</CardTitle>
+        <CardTitle>Join Server</CardTitle>
         <CardDescription className="flex items-center gap-2">
-          <span>您已被邀请加入</span>
+          <span>You have been invited to join</span>
           <strong>{name}</strong>
-          <span>服务器</span>
+          <span>server</span>
         </CardDescription>
       </CardHeader>
       <CardContent>
         <Separator />
       </CardContent>
       <CardFooter className="w-full flex flex-col lg:flex-row justify-center gap-2">
-        <Button variant="outline" onClick={handleCancel} className="w-full lg:w-auto">取消</Button>
-        <Button onClick={handleJoin} disabled={isPending} type="submit" className="w-full lg:w-auto">加入</Button>
+        <Button variant="outline" onClick={handleCancel} className="w-full lg:w-auto">Cancel</Button>
+        <Button onClick={handleJoin} disabled={isPending} type="submit" className="w-full lg:w-auto">Join</Button>
       </CardFooter>
     </Card>
   )

@@ -17,13 +17,13 @@ export const useCreateServer = () => {
       const response = await client.api.servers['$post']({ json })
 
       if (!response.ok) {
-        throw new Error('创建失败...')
+        throw new Error('request error...')
       }
 
       return await response.json()
     },
     onSuccess: () => {
-      toast.success('创建成功！')
+      toast.success('success！')
 
       router.refresh()
       void queryClient.invalidateQueries({ queryKey: ['servers'] })
