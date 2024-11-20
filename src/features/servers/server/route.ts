@@ -175,5 +175,53 @@ const app = new Hono()
 
     return c.json({ data: server })
   })
+  .patch('/:serverId/members/:memberId/role',
+    zValidator('json', z.object({ role: z.nativeEnum(MemberRole) })),
+    async (c) => {
+      const profile = await getCurrentProfile()
+
+      if (!profile) {
+        return c.json({ error: 'Unauthorized' }, 401)
+      }
+
+      const { serverId, memberId } = c.req.param()
+      const { role } = c.req.valid('json')
+
+      if (!serverId || !memberId) {
+        return c.json({ error: 'Server or member not found' }, 404)
+      }
+
+      const server = await db.server.update({
+        where: {
+          id: serverId,
+          profileId: profile.id
+        },
+        data: {
+          members: {
+            update: {
+              where: {
+                id: memberId,
+                profileId: {
+                  not: profile.id
+                }
+              },
+              data: { role }
+            }
+          }
+        },
+        include: {
+          members: {
+            include: {
+              profile: true
+            },
+            orderBy: {
+              role: 'asc'
+            }
+          }
+        }
+      })
+
+      return c.json({ data: server })
+    })
 
 export default app
