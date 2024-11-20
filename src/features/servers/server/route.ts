@@ -7,7 +7,7 @@ import { z } from 'zod';
 import { getCurrent, getCurrentProfile } from '@/lib/current-profile';
 import db from "@/lib/db";
 
-import { createServerSchema } from '../schemas';
+import { createServerSchema, editServerSchema } from '../schemas';
 
 const app = new Hono()
   .post('/', zValidator('json', createServerSchema), async (c) => {
@@ -150,5 +150,28 @@ const app = new Hono()
 
       return c.json({ data: server })
     })
+  .patch('/:serverId', zValidator('json', editServerSchema), async (c) => {
+    const profile = await getCurrentProfile()
+
+    if (!profile) {
+      return c.json({ error: 'Unauthorized' }, 401)
+    }
+
+    const { serverId } = c.req.param()
+    const { name, imageUrl } = c.req.valid('json')
+
+    const server = await db.server.update({
+      where: {
+        id: serverId,
+        profileId: profile.id
+      },
+      data: {
+        name,
+        imageUrl
+      }
+    })
+
+    return c.json({ data: server })
+  })
 
 export default app

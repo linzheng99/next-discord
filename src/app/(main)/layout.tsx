@@ -1,5 +1,6 @@
 import NavigationSidebar from "@/components/navigation/navigation-sidebar";
 import CreateServerModel from '@/features/servers/components/create-server-modal'
+import EditServerModal from "@/features/servers/components/edit-server-modal";
 import InviteCodeServerModal from "@/features/servers/components/invite-code-server-modal";
 
 export default function MainLayout({ children }: { children: React.ReactNode }) {
@@ -7,6 +8,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
   return (
     <div className="h-full">
       <CreateServerModel />
+      <EditServerModal />
       <InviteCodeServerModal />
       <div className="flex h-full">
         <div className="hidden md:!flex w-[72px] z-30 flex-col fixed inset-y-0">
