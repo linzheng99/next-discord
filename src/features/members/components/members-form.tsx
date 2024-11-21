@@ -1,6 +1,5 @@
 "use client"
 
-
 import { MemberRole } from "@prisma/client"
 import { Check, Gavel, Loader2, MoreVertical, Shield, ShieldAlert, ShieldCheck, ShieldQuestion } from "lucide-react"
 import { useState } from "react"
@@ -25,12 +24,12 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { useModalStore } from "@/hooks/use-modal-store"
+import { useServerId } from "@/hooks/use-server-id"
+import { type ServerWithMembersWithProfiles } from "@/types"
 
-import { useMemberDeleteServer } from "../api/use-member-delete-server"
-import { useMemberRoleServer } from "../api/use-member-role-server"
-import { useServerId } from "../hooks/use-server-id"
-import { type ServerWithMembersWithProfiles } from "../types"
-import UserAvatar from "./user-avatar"
+import { useKickMember } from "../api/use-kick-member"
+import { useUpdateMemberRole } from "../api/use-update-member-role"
+import MemberAvatar from "./member-avatar"
 
 const roleIconMap = {
   ADMIN: <ShieldAlert className="w-4 h-4 text-rose-500" />,
@@ -45,14 +44,14 @@ export default function MembersServerForm() {
 
   const { server } = data as { server: ServerWithMembersWithProfiles }
 
-  const { mutate: updateMemberRole } = useMemberRoleServer()
-  const { mutate: deleteMember } = useMemberDeleteServer()
+  const { mutate: updateMemberRole } = useUpdateMemberRole()
+  const { mutate: deleteMember } = useKickMember()
   const [loadingId, setLoadingId] = useState('')
 
   function handleMemberRole(memberId: string, role: MemberRole) {
     setLoadingId(memberId)
     updateMemberRole(
-      { json: { role }, param: { serverId, memberId } },
+      { json: { role, serverId, memberId } },
       {
         onSuccess: ({ data }) => {
           onOpen('members', { server: data as unknown as ServerWithMembersWithProfiles })
@@ -91,7 +90,7 @@ export default function MembersServerForm() {
         <ScrollArea className="max-h-[420px]">
           {server?.members?.map(member => (
             <div key={member.id} className="flex items-center gap-x-2 mb-6">
-              <UserAvatar name={member.profile.name} imageUrl={member.profile.imageUrl} />
+              <MemberAvatar name={member.profile.name} imageUrl={member.profile.imageUrl} />
               <div className="flex flex-col gap-y-1">
                 <div className="text-sm font-semibold text-primary flex items-center gap-x-2">
                   {member.profile.name}

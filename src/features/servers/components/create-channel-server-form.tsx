@@ -25,9 +25,9 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import { useServerId } from "@/hooks/use-server-id";
 
 import { useCreateChannelServer } from "../api/use-create-channel-server"
-import { useServerId } from "../hooks/use-server-id"
 import { createChannelSchema } from "../schemas"
 
 interface CreateChannelServerFormProps {

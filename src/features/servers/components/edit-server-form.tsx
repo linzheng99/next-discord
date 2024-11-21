@@ -20,9 +20,9 @@ import {
 } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import { useModalStore } from "@/hooks/use-modal-store"
+import { useServerId } from "@/hooks/use-server-id";
 
 import { useEditServer } from "../api/use-edit-server"
-import { useServerId } from "../hooks/use-server-id"
 import { editServerSchema } from "../schemas"
 
 interface EditServerFormProps {

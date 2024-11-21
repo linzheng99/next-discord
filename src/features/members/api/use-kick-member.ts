@@ -5,15 +5,15 @@ import { toast } from 'sonner'
 import { client } from '@/lib/rpc'
 
 
-type ResponseType = InferResponseType<typeof client.api.servers[':serverId']['members'][':memberId']['$delete'], 200>
-type RequestType = InferRequestType<typeof client.api.servers[':serverId']['members'][':memberId']['$delete']>
+type ResponseType = InferResponseType<typeof client.api.members[':serverId']['members'][':memberId']['$delete'], 200>
+type RequestType = InferRequestType<typeof client.api.members[':serverId']['members'][':memberId']['$delete']>
 
-export const useMemberDeleteServer = () => {
+export const useKickMember = () => {
   const queryClient = useQueryClient()
 
   const mutation = useMutation<ResponseType, Error, RequestType>({
     mutationFn: async ({ param }) => {
-      const response = await client.api.servers[':serverId']['members'][':memberId']['$delete']({ param })
+      const response = await client.api.members[':serverId']['members'][':memberId']['$delete']({ param })
 
       if (!response.ok) {
         throw new Error('request error...')

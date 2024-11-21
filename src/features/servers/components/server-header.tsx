@@ -11,11 +11,11 @@ import {
 } from "@/components/ui/dropdown-menu"
 import { useConfirm } from "@/hooks/use-confirm"
 import { useModalStore } from "@/hooks/use-modal-store"
+import { useServerId } from "@/hooks/use-server-id";
+import { type ServerWithMembersWithProfiles } from "@/types"
 
 import { useDeleteServer } from "../api/use-delete-server"
 import { useLeaveServer } from "../api/use-leave-server"
-import { useServerId } from "../hooks/use-server-id"
-import { type ServerWithMembersWithProfiles } from "../types"
 
 interface ServerHeaderProps {
   server: ServerWithMembersWithProfiles

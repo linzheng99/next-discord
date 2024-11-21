@@ -4,7 +4,7 @@ import Image from "next/image"
 import { useRouter } from "next/navigation"
 
 import ActionTooltip from "@/components/action-tooltip"
-import { useServerId } from "@/features/servers/hooks/use-server-id"
+import { useServerId } from "@/hooks/use-server-id";
 import { cn } from "@/lib/utils"
 
 interface NavigationItemProps {

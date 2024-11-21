@@ -3,19 +3,19 @@ import Image from "next/image"
 import { Avatar, AvatarFallback } from "@/components/ui/avatar"
 import { cn } from "@/lib/utils"
 
-interface UserAvatarProps {
+interface MemberAvatarProps {
   imageUrl?: string
   name: string
   className?: string
   fallbackClassName?: string
 }
 
-export default function UserAvatar({
+export default function MemberAvatar({
   imageUrl,
   name,
   className,
   fallbackClassName
-}: UserAvatarProps) {
+}: MemberAvatarProps) {
   if (imageUrl) {
     return (
       <div className={cn("size-10 relative rounded-full overflow-hidden", className)}>

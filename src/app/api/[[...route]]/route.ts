@@ -4,6 +4,8 @@ import { handle } from 'hono/vercel'
 
 import auth from '@/features/auth/server/route'
 import servers from '@/features/servers/server/route'
+import channels from '@/features/channels/server/route'
+import members from '@/features/members/server/route'
 
 const app = new Hono().basePath('/api')
 
@@ -13,6 +15,8 @@ app.use('*', clerkMiddleware())
 const routes = app
   .route('/auth', auth)
   .route('/servers', servers)
+  .route('/channels', channels)
+  .route('/members', members)
 
 export const GET = handle(app)
 export const POST = handle(app)

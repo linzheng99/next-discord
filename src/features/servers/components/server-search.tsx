@@ -15,9 +15,8 @@ import {
   CommandList,
 } from "@/components/ui/command"
 import { DialogTitle } from "@/components/ui/dialog"
-
-import { useServerId } from "../hooks/use-server-id"
-import { type ServerWithMembersWithProfiles } from "../types"
+import { useServerId } from "@/hooks/use-server-id";
+import { type ServerWithMembersWithProfiles } from "@/types"
 
 interface ServerSearchProps {
   data: {

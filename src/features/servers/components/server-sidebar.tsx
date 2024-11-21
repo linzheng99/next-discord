@@ -7,9 +7,9 @@ import { redirect } from "next/navigation"
 import PageLoader from "@/components/page-loader"
 import { ScrollArea } from "@/components/ui/scroll-area"
 import { useGetServer } from "@/features/servers/api/use-get-server"
+import { useServerId } from "@/hooks/use-server-id";
+import { type ServerWithMembersWithProfiles } from "@/types"
 
-import { useServerId } from "../hooks/use-server-id"
-import { type ServerWithMembersWithProfiles } from "../types"
 import ServerHeader from "./server-header"
 import ServerSearch from "./server-search"
 

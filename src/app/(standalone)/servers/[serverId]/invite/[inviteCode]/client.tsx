@@ -4,7 +4,7 @@ import PageError from "@/components/page-error";
 import PageLoader from "@/components/page-loader";
 import { useGetServer } from "@/features/servers/api/use-get-server";
 import JoinServerForm from "@/features/servers/components/join-server-form";
-import { useServerId } from "@/features/servers/hooks/use-server-id";
+import { useServerId } from "@/hooks/use-server-id";
 
 export default function ServerIdJoinClient() {
   const serverId = useServerId()

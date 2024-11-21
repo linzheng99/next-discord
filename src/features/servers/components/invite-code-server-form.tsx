@@ -9,11 +9,11 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useModalStore } from "@/hooks/use-modal-store";
+import { useServerId } from "@/hooks/use-server-id";
+import { type ServerWithMembersWithProfiles } from "@/types"
 
 import { useOrigin } from '../../../hooks/use-origin';
 import { useResetInviteCode } from "../api/use-reset-invite-code";
-import { useServerId } from "../hooks/use-server-id";
-import { type ServerWithMembersWithProfiles } from "../types";
 
 export default function InviteCodeServerForm() {
   const origin = useOrigin()
