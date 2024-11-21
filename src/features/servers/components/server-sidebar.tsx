@@ -1,17 +1,21 @@
 "use client"
 
-import { ChannelType, MemberRole } from "@prisma/client"
+import { type Channel, ChannelType, MemberRole } from "@prisma/client"
 import { Hash, Mic, Shield, ShieldAlert, ShieldCheck, Video } from "lucide-react"
 import { redirect } from "next/navigation"
 
 import PageLoader from "@/components/page-loader"
 import { ScrollArea } from "@/components/ui/scroll-area"
+import { Separator } from "@/components/ui/separator"
 import { useGetServer } from "@/features/servers/api/use-get-server"
 import { useServerId } from "@/hooks/use-server-id";
-import { type ServerWithMembersWithProfiles } from "@/types"
+import { type MemberWithProfile, type ServerWithMembersWithProfiles } from "@/types"
 
+import ServerChannel from "./server-channel"
 import ServerHeader from "./server-header"
+import ServerMember from "./server-member"
 import ServerSearch from "./server-search"
+import ServerSection from "./server-section"
 
 interface ServerSidebarProps {
   profileId: string
@@ -91,6 +95,95 @@ export default function ServerSidebar({ profileId }: ServerSidebarProps) {
             }
           ]} />
         </div>
+        <Separator className="my-2 bg-zinc-300 dark:bg-zinc-700" />
+        {
+          !!textChannels.length && (
+            <div className="mb-2">
+              <ServerSection
+                label="Text Channels"
+                role={role}
+                sectionType="channels"
+                channelType={ChannelType.TEXT}
+                server={server as unknown as ServerWithMembersWithProfiles}
+              />
+              <div className="space-y-2">
+                {textChannels?.map(channel => (
+                  <ServerChannel
+                    key={channel.id}
+                    channel={channel as unknown as Channel}
+                    role={role}
+                  />
+                ))}
+              </div>
+            </div>
+          )
+        }
+        {
+          !!audioChannels.length && (
+            <div className="mb-2">
+              <ServerSection
+                label="Audio Channels"
+                role={role}
+                sectionType="channels"
+                channelType={ChannelType.AUDIO}
+                server={server as unknown as ServerWithMembersWithProfiles}
+              />
+              <div className="space-y-2">
+                {audioChannels?.map(channel => (
+                  <ServerChannel
+                    key={channel.id}
+                    channel={channel as unknown as Channel}
+                    role={role}
+                  />
+                ))}
+              </div>
+            </div>
+          )
+        }
+        {
+          !!videoChannels.length && (
+            <div className="mb-2">
+              <ServerSection
+                label="Video Channels"
+                role={role}
+                sectionType="channels"
+                channelType={ChannelType.VIDEO}
+                server={server as unknown as ServerWithMembersWithProfiles}
+              />
+              <div className="space-y-2">
+                {videoChannels?.map(channel => (
+                  <ServerChannel
+                    key={channel.id}
+                    channel={channel as unknown as Channel}
+                    role={role}
+                  />
+                ))}
+
+              </div>
+            </div>
+          )
+        }
+        {
+          !!members.length && (
+            <div className="mb-2">
+              <ServerSection
+                label="Members"
+                role={role}
+                sectionType="members"
+                server={server as unknown as ServerWithMembersWithProfiles}
+              />
+              <div className="space-y-2">
+                {members?.map(member => (
+                  <ServerMember
+                    key={member.id}
+                    member={member as unknown as MemberWithProfile}
+                  />
+                ))}
+
+              </div>
+            </div>
+          )
+        }
       </ScrollArea>
     </div>
   )

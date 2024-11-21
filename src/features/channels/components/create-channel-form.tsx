@@ -4,6 +4,7 @@ import "@uploadthing/react/styles.css"
 
 import { zodResolver } from "@hookform/resolvers/zod"
 import { ChannelType } from "@prisma/client"
+import { useEffect } from "react"
 import { useForm } from "react-hook-form"
 import { type z } from "zod"
 
@@ -25,6 +26,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select"
+import { useModalStore } from "@/hooks/use-modal-store"
 import { useServerId } from "@/hooks/use-server-id";
 
 import { useCreateChannel } from "../api/use-create-channel"
@@ -36,14 +38,24 @@ interface CreateChannelFormProps {
 
 export default function CreateChannelForm({ onCancel }: CreateChannelFormProps) {
   const serverId = useServerId()
+  const { data: { channelType } } = useModalStore()
+
   const form = useForm<z.infer<typeof createChannelSchema>>({
     resolver: zodResolver(createChannelSchema),
     defaultValues: {
       name: "",
-      type: ChannelType.TEXT,
+      type: channelType || ChannelType.TEXT,
       serverId,
     },
   })
+
+  useEffect(() => {
+    if (channelType) {
+      form.setValue('type', channelType)
+    } else {
+      form.setValue('type', ChannelType.TEXT)
+    }
+  }, [channelType])
 
   const { mutate: createChannel, isPending } = useCreateChannel()
 
