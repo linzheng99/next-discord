@@ -6,6 +6,7 @@ import ActionTooltip from "@/components/action-tooltip"
 import { useDeleteChannel } from "@/features/channels/api/use-delete-channel"
 import { useChannelId } from "@/hooks/use-channel-id"
 import { useConfirm } from "@/hooks/use-confirm"
+import { useModalStore } from "@/hooks/use-modal-store"
 import { useServerId } from "@/hooks/use-server-id"
 import { cn } from "@/lib/utils"
 
@@ -28,6 +29,7 @@ export default function ServerChannel({ channel, role }: ServerChannelProps) {
 
   const [DeleteChannelDialog, confirmDeleteChannel] = useConfirm(`Delete ${channel.name}`, `Are you sure you want to delete this channel? This action cannot be undone.`, 'destructive')
   const { mutate: deleteChannel } = useDeleteChannel()
+  const { onOpen } = useModalStore()
 
   async function handleDeleteChannel() {
     const ok = await confirmDeleteChannel()
@@ -43,13 +45,28 @@ export default function ServerChannel({ channel, role }: ServerChannelProps) {
     )
   }
 
+  async function channelAction({ e, action }: { e: React.MouseEvent, action: 'edit' | 'delete' }) {
+    e.stopPropagation()
+    if (action === 'edit') {
+      onOpen('editChannel', { channel })
+    } else if (action === 'delete') {
+      await handleDeleteChannel()
+    }
+  }
+
+  function clickChannel() {
+    console.log('clickChannel', channel)
+  }
+
   return (
     <>
       <DeleteChannelDialog />
-      <div className={cn(
-        "group flex items-center p-2 gap-x-2 cursor-pointer justify-between hover:bg-zinc-700/10 dark:hover:bg-zinc-700/50 transition w-full rounded-md",
-        channelId === channel.id && "bg-zinc-700/20 dark:bg-zinc-700"
-      )}>
+      <div
+        onClick={clickChannel}
+        className={cn(
+          "group flex items-center p-2 gap-x-2 cursor-pointer justify-between hover:bg-zinc-700/10 dark:hover:bg-zinc-700/50 transition w-full rounded-md",
+          channelId === channel.id && "bg-zinc-700/20 dark:bg-zinc-700"
+        )}>
         <div className="flex items-center gap-x-2 max-w-[150px]">
           <Icon className="w-4 h-4 text-zinc-500 dark:text-zinc-400 group-hover:text-zinc-600 dark:group-hover:text-zinc-300 transition flex-shrink-0" />
           <p className={cn(
@@ -64,10 +81,10 @@ export default function ServerChannel({ channel, role }: ServerChannelProps) {
             role !== MemberRole.GUEST && channel.name !== 'general' && (
               <div className="flex items-center gap-x-2">
                 <ActionTooltip label="Edit">
-                  <Edit className="hidden group-hover:block w-4 h-4 text-zinc-500 dark:text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300 transition" />
+                  <Edit onClick={(e) => channelAction({ e, action: 'edit' })} className="hidden group-hover:block w-4 h-4 text-zinc-500 dark:text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300 transition" />
                 </ActionTooltip>
                 <ActionTooltip label="Delete">
-                  <Trash onClick={handleDeleteChannel} className="hidden group-hover:block w-4 h-4 text-zinc-500 dark:text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300 transition" />
+                  <Trash onClick={(e) => channelAction({ e, action: 'delete' })} className="hidden group-hover:block w-4 h-4 text-zinc-500 dark:text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300 transition" />
                 </ActionTooltip>
               </div>
             )

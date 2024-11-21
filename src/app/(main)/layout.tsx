@@ -1,5 +1,6 @@
 import NavigationSidebar from "@/components/navigation/navigation-sidebar";
 import CreateChannelModal from "@/features/channels/components/create-channel-modal";
+import EditChannelModal from "@/features/channels/components/edit-channel-modal";
 import MembersModal from "@/features/members/components/members-modal";
 import CreateServerModel from '@/features/servers/components/create-server-modal'
 import EditServerModal from "@/features/servers/components/edit-server-modal";
@@ -14,6 +15,7 @@ export default function MainLayout({ children }: { children: React.ReactNode }) 
       <InviteCodeServerModal />
       <MembersModal />
       <CreateChannelModal />
+      <EditChannelModal />
       <div className="flex h-full">
         <div className="hidden md:!flex w-[72px] z-30 flex-col fixed inset-y-0">
           <NavigationSidebar />
