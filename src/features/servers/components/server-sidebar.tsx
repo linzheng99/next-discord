@@ -52,7 +52,7 @@ export default function ServerSidebar({ profileId }: ServerSidebarProps) {
 
 
   return (
-    <div className="flex flex-col h-full text-primary w-full dark:bg-[#2b2b37] bg-[#e5e5e5]">
+    <div className="flex flex-col h-full text-primary w-full dark:bg-[#2b2b37] bg-[#F2F3F5]">
       <ServerHeader server={server as unknown as ServerWithMembersWithProfiles} role={role} />
       <ScrollArea className="flex-1 px-3">
         <div className="mt-2">

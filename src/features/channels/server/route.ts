@@ -46,4 +46,44 @@ const app = new Hono()
 
     return c.json({ data: server })
   })
+  .delete('/:serverId/channels/:channelId', async (c) => {
+    const profile = await getCurrentProfile()
+
+    if (!profile) {
+      return c.json({ error: 'Unauthorized' }, 401)
+    }
+
+    const { serverId, channelId } = c.req.param()
+
+    if (!serverId || !channelId) {
+      return c.json({ error: 'Server or channel not found' }, 404)
+    }
+
+    const server = await db.server.update({
+      where: {
+        id: serverId,
+        members: {
+          some: {
+            profileId: profile.id,
+            role: {
+              in: [MemberRole.ADMIN, MemberRole.MODERATOR]
+            }
+          }
+        }
+      },
+      data: {
+        channels: {
+          deleteMany: {
+            id: channelId,
+            name: {
+              not: 'general'
+            }
+          }
+        }
+      }
+    })
+
+    return c.json({ data: server })
+  })
+
 export default app
