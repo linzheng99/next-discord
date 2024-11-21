@@ -3,9 +3,9 @@ import { Hono } from 'hono'
 import { handle } from 'hono/vercel'
 
 import auth from '@/features/auth/server/route'
-import servers from '@/features/servers/server/route'
 import channels from '@/features/channels/server/route'
 import members from '@/features/members/server/route'
+import servers from '@/features/servers/server/route'
 
 const app = new Hono().basePath('/api')
 

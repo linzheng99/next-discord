@@ -5,16 +5,16 @@ import { toast } from 'sonner'
 
 import { client } from '@/lib/rpc'
 
-type ResponseType = InferResponseType<typeof client.api.servers[':serverId']['channels']['$post'], 200>
-type RequestType = InferRequestType<typeof client.api.servers[':serverId']['channels']['$post']>
+type ResponseType = InferResponseType<typeof client.api.channels['create-channel']['$post'], 200>
+type RequestType = InferRequestType<typeof client.api.channels['create-channel']['$post']>
 
-export const useCreateChannelServer = () => {
+export const useCreateChannel = () => {
   const router = useRouter()
   const queryClient = useQueryClient()
 
   const mutation = useMutation<ResponseType, Error, RequestType>({
-    mutationFn: async ({ json, param }) => {
-      const response = await client.api.servers[':serverId']['channels']['$post']({ json, param })
+    mutationFn: async ({ json }) => {
+      const response = await client.api.channels['create-channel']['$post']({ json })
 
       if (!response.ok) {
         throw new Error('request error...')

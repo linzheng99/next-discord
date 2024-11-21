@@ -3,16 +3,16 @@
 import ResponsiveModel from "@/components/responsive-modal";
 import { useModalStore } from "@/hooks/use-modal-store";
 
-import CreateChannelServerForm from "./create-channel-server-form";
+import CreateChannelForm from "./create-channel-form";
 
-export default function CreateChannelServerModal() {
+export default function CreateChannelModal() {
   const { type, onClose, isOpen } = useModalStore()
 
   const isModalOpen = type === 'createChannel' && isOpen
 
   return (
     <ResponsiveModel open={isModalOpen} onOpenChange={onClose}>
-      <CreateChannelServerForm onCancel={onClose} />
+      <CreateChannelForm onCancel={onClose} />
     </ResponsiveModel>
   )
 }

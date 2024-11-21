@@ -27,28 +27,29 @@ import {
 } from "@/components/ui/select"
 import { useServerId } from "@/hooks/use-server-id";
 
-import { useCreateChannelServer } from "../api/use-create-channel-server"
+import { useCreateChannel } from "../api/use-create-channel"
 import { createChannelSchema } from "../schemas"
 
-interface CreateChannelServerFormProps {
+interface CreateChannelFormProps {
   onCancel: () => void
 }
 
-export default function CreateChannelServerForm({ onCancel }: CreateChannelServerFormProps) {
+export default function CreateChannelForm({ onCancel }: CreateChannelFormProps) {
   const serverId = useServerId()
   const form = useForm<z.infer<typeof createChannelSchema>>({
     resolver: zodResolver(createChannelSchema),
     defaultValues: {
       name: "",
       type: ChannelType.TEXT,
+      serverId,
     },
   })
 
-  const { mutate: createChannel, isPending } = useCreateChannelServer()
+  const { mutate: createChannel, isPending } = useCreateChannel()
 
   function onSubmit(values: z.infer<typeof createChannelSchema>) {
     createChannel(
-      { json: values, param: { serverId } },
+      { json: { ...values, serverId } },
       {
         onSuccess: () => {
           handleClose()
