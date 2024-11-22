@@ -55,7 +55,7 @@ export default function ServerChannel({ channel, role }: ServerChannelProps) {
   }
 
   function clickChannel() {
-    console.log('clickChannel', channel)
+    router.push(`/servers/${serverId}/channels/${channel.id}`)
   }
 
   return (
