@@ -1,6 +1,7 @@
 "use client"
 
 
+import { VisuallyHidden } from "@radix-ui/react-visually-hidden"
 import { Search } from "lucide-react"
 import { useRouter } from "next/navigation"
 import { useEffect, useState } from "react"
@@ -43,7 +44,7 @@ export default function ServerSearch({ data, server }: ServerSearchProps) {
         setOpen((open) => !open)
       }
     }
- 
+
     document.addEventListener("keydown", down)
     return () => document.removeEventListener("keydown", down)
   }, [])
@@ -73,7 +74,9 @@ export default function ServerSearch({ data, server }: ServerSearchProps) {
         </div>
       </Button>
       <CommandDialog open={open} onOpenChange={setOpen}>
-        <DialogTitle className="p-3">{server.name}</DialogTitle>
+        <VisuallyHidden>
+          <DialogTitle className="p-3">{server.name}</DialogTitle>
+        </VisuallyHidden>
         <CommandInput placeholder="Search channels and members" />
         <CommandList>
           <CommandEmpty>

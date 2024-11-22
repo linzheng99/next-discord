@@ -96,5 +96,20 @@ const app = new Hono()
 
     return c.json({ data: server })
   })
+  .get('/:serverId', async (c) => {
+    const profile = await getCurrentProfile()
+    if (!profile) return c.json({ error: 'Unauthorized' }, 401)
+
+    const { serverId } = c.req.param()
+
+    const member = await db.member.findMany({
+      where: {
+        serverId,
+        profileId: profile.id
+      }
+    })
+
+    return c.json({ data: member })
+  })
 
 export default app

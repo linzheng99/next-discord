@@ -125,5 +125,20 @@ const app = new Hono()
 
     return c.json({ data: server })
   })
+  .get('/:channelId', async (c) => {
+    const profile = await getCurrentProfile()
+
+    if (!profile) return c.json({ error: 'Unauthorized' }, 401)
+
+    const { channelId } = c.req.param()
+
+    const channel = await db.channel.findUnique({
+      where: {
+        id: channelId,
+      }
+    })
+
+    return c.json({ data: channel })
+  })
 
 export default app
