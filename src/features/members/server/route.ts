@@ -102,10 +102,13 @@ const app = new Hono()
 
     const { serverId } = c.req.param()
 
-    const member = await db.member.findMany({
+    const member = await db.member.findFirst({
       where: {
         serverId,
         profileId: profile.id
+      },
+      include: {
+        profile: true
       }
     })
 
