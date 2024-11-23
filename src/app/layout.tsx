@@ -9,6 +9,7 @@ import { Toaster } from "sonner";
 
 import QueryProvider from "@/components/providers/query-provider";
 import { ThemeProvider } from "@/components/providers/theme-provider"
+import { SocketProvider } from "@/components/socket-provider";
 import { cn } from "@/lib/utils";
 
 const font = Open_Sans({
@@ -39,7 +40,9 @@ export default function RootLayout({
           >
             <QueryProvider>
               <Toaster />
-              {children}
+              <SocketProvider>
+                {children}
+              </SocketProvider>
             </QueryProvider>
           </ThemeProvider>
         </body>
