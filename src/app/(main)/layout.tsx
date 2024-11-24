@@ -9,7 +9,7 @@ import InviteCodeServerModal from "@/features/servers/components/invite-code-ser
 export default function MainLayout({ children }: { children: React.ReactNode }) {
 
   return (
-    <div className="h-full">
+    <div className="min-h-screen">
       <CreateServerModel />
       <EditServerModal />
       <InviteCodeServerModal />

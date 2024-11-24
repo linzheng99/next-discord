@@ -9,11 +9,11 @@ export default async function ServersIdLayout({ children }: { children: React.Re
   if (!profile) redirect('/')
 
   return (
-    <div className="h-full">
+    <div className="min-h-screen">
       <div className="hidden md:!flex w-60 z-20 flex-col fixed inset-y-0">
         <ServerSidebar profileId={profile.id} />
       </div>
-      <main className="h-full md:pl-60">{children}</main>
+      <main className="min-h-screen md:pl-60">{children}</main>
     </div>
   )
 }

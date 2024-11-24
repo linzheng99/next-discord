@@ -1,9 +1,11 @@
 "use client"
 
-import PageError from "@/components/page-error"
+import { redirect } from "next/navigation"
+
 import PageLoader from "@/components/page-loader"
 import { useGetChannel } from "@/features/channels/api/use-get-channel"
 import ChatHeader from "@/features/chat/components/chat-header"
+import ChatInput from "@/features/chat/components/chat-input"
 import { useGetMemberServer } from "@/features/members/api/use-get-member-server"
 import { useChannelId } from "@/hooks/use-channel-id"
 import { useServerId } from "@/hooks/use-server-id"
@@ -21,11 +23,20 @@ export default function ChannelIdClient({ profileId }: ChannelIdClientProps) {
 
   if (isLoadingChannel || isLoadingMember) return <PageLoader />
 
-  if (!channel || !member) return <PageError />
+  if (!channel || !member) return redirect('/')
 
   return (
-    <div>
-      <ChatHeader name={channel.name} type={'channel'} profileId={profileId} />
+    <div className="flex min-h-screen flex-col bg-white dark:bg-[#313338]">
+      <ChatHeader name={channel.name} type="channel" profileId={profileId} />
+      <div className="flex-1">
+        messages
+      </div>
+      <ChatInput
+        name={channel.name}
+        type="channel"
+        apiUrl="/api/socket/messages"
+        query={{ channelId, serverId }}
+      />
     </div>
   )
 }
