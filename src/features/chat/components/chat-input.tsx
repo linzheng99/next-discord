@@ -1,7 +1,7 @@
 'use client'
 
 import { zodResolver } from "@hookform/resolvers/zod"
-import { Plus, Smile } from "lucide-react"
+import { Plus } from "lucide-react"
 import { useForm } from "react-hook-form"
 import { type z } from "zod"
 
@@ -11,6 +11,7 @@ import { useModalStore } from "@/hooks/use-modal-store"
 
 import { useSendMessage } from "../api/use-send-message"
 import { chatInputSchema } from "../schemas"
+import EmojiPicker from "./emoji-picker"
 
 interface ChatInputProps {
   name: string
@@ -41,7 +42,7 @@ export default function ChatInput({ name, type, apiUrl, query }: ChatInputProps)
 
   return (
     <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="">
+      <form onSubmit={form.handleSubmit(onSubmit)}>
         <FormField
           control={form.control}
           name="content"
@@ -50,6 +51,7 @@ export default function ChatInput({ name, type, apiUrl, query }: ChatInputProps)
               <FormControl>
                 <div className="relative p-4 pb-6">
                   <button
+                    type="button"
                     onClick={() => onOpen('messageFile', { apiUrl, query })}
                     className="absolute left-8 top-7 size-[24px] bg-zinc-500 dark:bg-zinc-400 hover:bg-zinc-600 dark:hover:bg-zinc-300 transition rounded-full flex items-center justify-center p-1">
                     <Plus className="size-4 text-white dark:text-[#313338]" />
@@ -61,7 +63,7 @@ export default function ChatInput({ name, type, apiUrl, query }: ChatInputProps)
                     disabled={isPending}
                   />
                   <div className="absolute right-8 top-7 cursor-pointer">
-                    <Smile className="size-6 text-zinc-500 dark:text-zinc-400 hover:text-zinc-600 dark:hover:text-zinc-300 transition" />
+                    <EmojiPicker onChange={(emoji) => field.onChange(field.value + emoji)} />
                   </div>
                 </div>
               </FormControl>
