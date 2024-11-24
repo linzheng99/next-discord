@@ -1,12 +1,15 @@
 import { type Channel, type ChannelType, type Server } from '@prisma/client'
 import { create } from 'zustand'
 
-export type ModalType = 'createServer' | 'invite' | 'editServer' | 'members' | 'createChannel' | 'editChannel'
+export type ModalType = 'createServer' | 'invite' | 'editServer' | 'members' | 'createChannel' | 'editChannel' | 'messageFile'
 
 export type ModalData = {
   server?: Server
   channel?: Channel
   channelType?: ChannelType
+  apiUrl?: string
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  query?: Record<string, any>
 }
 
 interface ModalStore {

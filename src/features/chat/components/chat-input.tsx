@@ -7,6 +7,7 @@ import { type z } from "zod"
 
 import { Form, FormControl, FormField, FormItem } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
+import { useModalStore } from "@/hooks/use-modal-store"
 
 import { useSendMessage } from "../api/use-send-message"
 import { chatInputSchema } from "../schemas"
@@ -20,6 +21,7 @@ interface ChatInputProps {
 }
 
 export default function ChatInput({ name, type, apiUrl, query }: ChatInputProps) {
+  const { onOpen } = useModalStore()
   const form = useForm<z.infer<typeof chatInputSchema>>({
     resolver: zodResolver(chatInputSchema),
     defaultValues: {
@@ -47,7 +49,9 @@ export default function ChatInput({ name, type, apiUrl, query }: ChatInputProps)
             <FormItem>
               <FormControl>
                 <div className="relative p-4 pb-6">
-                  <button className="absolute left-8 top-7 size-[24px] bg-zinc-500 dark:bg-zinc-400 hover:bg-zinc-600 dark:hover:bg-zinc-300 transition rounded-full flex items-center justify-center p-1">
+                  <button
+                    onClick={() => onOpen('messageFile', { apiUrl, query })}
+                    className="absolute left-8 top-7 size-[24px] bg-zinc-500 dark:bg-zinc-400 hover:bg-zinc-600 dark:hover:bg-zinc-300 transition rounded-full flex items-center justify-center p-1">
                     <Plus className="size-4 text-white dark:text-[#313338]" />
                   </button>
                   <Input

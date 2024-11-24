@@ -6,6 +6,7 @@ import qs from 'query-string'
 
 interface RequestParams {
   content: string
+  fileUrl: string
   apiUrl: string
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   query: Record<string, any>
@@ -18,16 +19,16 @@ type MessageWithMember = Message & {
 }
 
 
-export const useSendMessage = () => {
+export const useSendFile = () => {
   const { user } = useUser()
   return useMutation<MessageWithMember, Error, RequestParams>({
-    mutationFn: async ({ content, apiUrl, query }: RequestParams) => {
+    mutationFn: async ({ content, fileUrl, apiUrl, query }: RequestParams) => {
       const url = qs.stringifyUrl({
         url: apiUrl,
         query
       })
 
-      const response = await axios.post(url, { content, userId: user?.id })
+      const response = await axios.post(url, { content, fileUrl, userId: user?.id })
       return response.data as MessageWithMember
     }
   })
