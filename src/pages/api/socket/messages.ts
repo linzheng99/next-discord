@@ -1,8 +1,8 @@
 import { type NextApiRequest } from "next";
 
-import { type NextApiResponseServerIo } from "@/features/socket/types";
 import { getCurrentProfileByUserId } from "@/lib/current-profile";
 import db from "@/lib/db";
+import { type NextApiResponseServerIo } from "@/types";
 
 async function handler(req: NextApiRequest, res: NextApiResponseServerIo) {
   if (req.method !== 'POST') {
