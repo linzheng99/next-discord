@@ -25,3 +25,13 @@ export async function getCurrentProfile() {
 
   return profile
 }
+
+export async function getCurrentProfileByUserId(userId: string) {
+  const profile = await db.profile.findUnique({
+    where: {
+      userId
+    }
+  })
+
+  return profile
+}
