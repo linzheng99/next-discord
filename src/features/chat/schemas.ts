@@ -6,4 +6,5 @@ export const chatInputSchema = z.object({
 
 export const createFileSchema = z.object({
   fileUrl: z.string().min(1, { message: 'Attachment cannot be empty.' }),
+  content: z.string().min(1, { message: 'Attachment content cannot be empty.' }),
 })

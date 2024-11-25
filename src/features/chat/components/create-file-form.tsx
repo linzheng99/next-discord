@@ -31,6 +31,7 @@ export default function CreateFileForm({ onCancel }: CreateFileFormProps) {
     resolver: zodResolver(createFileSchema),
     defaultValues: {
       fileUrl: "",
+      content: ""
     },
   })
 
@@ -39,11 +40,16 @@ export default function CreateFileForm({ onCancel }: CreateFileFormProps) {
   function onSubmit(values: z.infer<typeof createFileSchema>) {
     if (!apiUrl || !query) return
 
-    mutate({ ...values, content: values.fileUrl, apiUrl, query }, {
+    mutate({ ...values, apiUrl, query }, {
       onSuccess: () => {
         handleClose()
       }
     })
+  }
+
+  function handleFileChange(url?: string, fileType?: string) {
+    form.setValue('fileUrl', url || "")
+    form.setValue('content', fileType || "")
   }
 
   function handleClose() {
@@ -70,7 +76,7 @@ export default function CreateFileForm({ onCancel }: CreateFileFormProps) {
                   render={({ field }) => (
                     <FormItem>
                       <FormControl>
-                        <FileUpload endpoint="messageFile" value={field.value} onChange={field.onChange} />
+                        <FileUpload endpoint="messageFile" value={field.value} onChange={(url, fileType) => handleFileChange(url, fileType)} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>

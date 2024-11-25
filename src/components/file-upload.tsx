@@ -9,7 +9,7 @@ import { UploadDropzone } from "@/lib/uploadthing"
 interface FileUploadProps {
   endpoint: "serverImage" | "messageFile"
   value: string
-  onChange: (url?: string) => void
+  onChange: (url?: string, fileType?: string) => void
 }
 
 export default function FileUpload({ endpoint, value, onChange }: FileUploadProps) {
@@ -22,7 +22,7 @@ export default function FileUpload({ endpoint, value, onChange }: FileUploadProp
         <button
           type="button"
           className="absolute top-0 right-0 p-1 rounded-full bg-rose-500 text-white shadow-sm"
-          onClick={() => onChange("")}
+          onClick={() => onChange("", "")}
         >
           <X className="h-4 w-4" />
         </button>
@@ -40,7 +40,7 @@ export default function FileUpload({ endpoint, value, onChange }: FileUploadProp
         <button
           type="button"
           className="absolute top-[-10px] right-[-10px] p-1 rounded-full bg-rose-500 text-white shadow-sm"
-          onClick={() => onChange("")}
+          onClick={() => onChange("", "")}
         >
           <X className="h-4 w-4" />
         </button>
@@ -52,9 +52,14 @@ export default function FileUpload({ endpoint, value, onChange }: FileUploadProp
     <UploadDropzone
       endpoint={endpoint}
       onClientUploadComplete={(res) => {
-        const { name, url } = res[0]
-        onChange(url)
-        setFileType(name.split(".").pop() || "")
+        const { url, serverData } = res[0]
+        if (!serverData) {
+          onChange(url, "")
+          return
+        }
+        const { fileType } = serverData
+        setFileType(fileType)
+        onChange(url, fileType)
       }}
       onUploadError={(error: Error) => {
         console.log(error)

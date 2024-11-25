@@ -16,7 +16,22 @@ export const ourFileRouter = {
     .onUploadComplete(() => {}),
   messageFile: f(["image", "pdf"])
     .middleware(handleAuth)
-    .onUploadComplete(() => {}),
+    .onUploadComplete(({ metadata, file }) => {
+      const fileExtension = file.name.split('.').pop()?.toLowerCase();
+      let fileType = "unknown";
+      
+      if (["jpg", "jpeg", "png", "gif", "webp"].includes(fileExtension || "")) {
+        fileType = "image";
+      } else if (fileExtension === "pdf") {
+        fileType = "pdf";
+      }
+      
+      return { 
+        uploadedBy: metadata.userId,
+        url: file.url,
+        fileType: fileType
+      };
+    }),
 } satisfies FileRouter;
 
 export type OurFileRouter = typeof ourFileRouter;

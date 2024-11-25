@@ -2,7 +2,7 @@ import { type Server as HttpServer } from 'http'
 import { type NextApiRequest } from 'next'
 import { Server as SocketIOServer } from 'socket.io'
 
-import { type NextApiResponseServerIo } from '@/features/socket/types'
+import { type NextApiResponseServerIo } from '@/types'
 
 export const config = {
   api: {
