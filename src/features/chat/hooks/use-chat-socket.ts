@@ -1,3 +1,5 @@
+"use client"
+
 import { type Message } from "@prisma/client";
 import { useQueryClient } from "@tanstack/react-query";
 import { useEffect } from "react";

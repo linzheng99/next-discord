@@ -96,11 +96,11 @@ export default function ChatMessage({
   return (
     <div ref={chatRef} className="flex flex-col h-full overflow-y-auto">
       {!hasNextPage && (
-        <div className="flex-1 flex">
-          <ChatWelcome name={name} type={type} />
-        </div>
+        <div className="flex-1 flex" />
       )}
-      
+      {!hasNextPage && (
+        <ChatWelcome name={name} type={type} />
+      )}
       {hasNextPage && (
         <div className="px-4 pt-4">
           {isFetchingNextPage ? (
@@ -108,10 +108,10 @@ export default function ChatMessage({
               <Loader2 className="h-3 w-3 animate-spin text-zinc-500 dark:text-zinc-400" />
             </div>
           ) : (
-            <Button 
-              onClick={() => fetchNextPage()} 
-              variant="ghost" 
-              size="sm" 
+            <Button
+              onClick={() => fetchNextPage()}
+              variant="ghost"
+              size="sm"
               className="w-full text-zinc-500 dark:text-zinc-400"
             >
               Load more
@@ -120,7 +120,7 @@ export default function ChatMessage({
         </div>
       )}
 
-      <div className="flex-1 flex flex-col-reverse px-4 pb-4">
+      <div className="flex flex-col-reverse px-4 pb-4 mt-auto">
         {data?.pages.map((page, i) => (
           <Fragment key={i}>
             {page.items.map((message: MessageWithMemberWithProfile) => (

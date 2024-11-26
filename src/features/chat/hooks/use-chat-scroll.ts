@@ -37,16 +37,37 @@ export default function useChatScroll({
     }
   }, [shouldLoadMore, loadMore, chatRef])
 
+  // useEffect(() => {
+  //   const topDiv = chatRef?.current
+  //   if (!topDiv) {
+  //     return
+  //   }
+  //   const MESSAGE_HEIGHT = 72 * 10 // 每条消息的固定高度
+
+  //   // TODO
+  //   // 通过消息数量计算高度，对比 clientHeight, 如果实际内容高度小于容器高度，继续加载更多
+  //   // 高度除以10条的高度720，然后依次加载, 如果得出来是2，则加载2次
+  //   const loadCount = Math.floor(topDiv.scrollHeight / MESSAGE_HEIGHT)
+  //   console.log(loadCount)
+  //   if (loadCount > 0) {
+  //     for (let i = 0; i < loadCount; i++) {
+  //       loadMore()
+  //       setTimeout(() => {
+  //         bottomRef?.current?.scrollIntoView({ behavior: 'smooth' })
+  //       }, 1000)
+  //     }
+  //   }
+
+  // }, [hasInitialized])
+
   // 处理自动滚动到消息底部
   useEffect(() => {
     const bottomDiv = bottomRef?.current
     const topDiv = chatRef?.current
 
-    const MESSAGE_HEIGHT = 72 // 每条消息的固定高度
-
     function scrollToBottom() {
       setTimeout(() => {
-        bottomDiv?.scrollIntoView({ behavior: 'smooth' })
+        bottomRef?.current?.scrollIntoView({ behavior: 'smooth' })
       }, 100)
     }
 
@@ -58,20 +79,7 @@ export default function useChatScroll({
         return true
       }
       if (!topDiv) {
-        console.log('没有topDiv')
         return false
-      }
-      // 根据消息数量计算实际内容高度
-      const actualContentHeight = count * MESSAGE_HEIGHT
-      const isContentLessThanContainer = actualContentHeight <= topDiv.clientHeight
-
-      // 如果实际内容高度小于容器高度，继续加载更多
-      if (isContentLessThanContainer && shouldLoadMore) {
-        loadMore()
-        setTimeout(() => {
-          scrollToBottom()
-        }, 1000)
-        return true
       }
 
       // scrollHeight 是元素的总高度
@@ -81,6 +89,7 @@ export default function useChatScroll({
       const distanceToBottom = topDiv.scrollHeight - topDiv.scrollTop - topDiv.clientHeight
       return distanceToBottom <= 100
     }
+
 
     // 执行是否需要自动滚动
     if (shouldAutoScroll()) {

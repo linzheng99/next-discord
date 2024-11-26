@@ -1,9 +1,10 @@
 import { redirect } from "next/navigation"
 
-import ChatHeader from "@/features/chat/components/chat-header"
 import { getOrCreateConversation } from "@/features/chat/queries"
 import { getCurrentMember } from "@/features/members/queries"
 import { getCurrentProfile } from "@/lib/current-profile"
+
+import ConversationIdClient from "./client"
 
 interface MemberIdPageProps {
   params: Promise<{
@@ -30,13 +31,11 @@ export default async function MemberIdPage({ params }: MemberIdPageProps) {
 
 
   return (
-    <div>
-      <ChatHeader
-        name={otherMember.profile.name}
-        type="conversation"
-        profileId={profile.id}
-        imageUrl={otherMember.profile.imageUrl}
-      />
-    </div>
+    <ConversationIdClient
+      profile={profile}
+      conversation={conversation}
+      otherMember={otherMember}
+      currentMember={currentMember}
+    />
   )
 }
