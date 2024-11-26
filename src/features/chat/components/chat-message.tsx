@@ -5,6 +5,7 @@ import { Fragment } from "react"
 import { type MemberWithProfile } from "@/types"
 
 import useChatQuery from "../hooks/use-chat-query"
+import useChatSocket from "../hooks/use-chat-socket"
 import { type MessageWithMemberWithProfile } from "../types"
 import ChatItem from "./chat-item"
 import ChatWelcome from "./chat-welcome"
@@ -35,12 +36,19 @@ export default function ChatMessage({
   type
 }: ChatMessageProps) {
   const queryKey = `chat:${chatId}`
+  const addKey = `chat:${chatId}:messages`
+  const updateKey = `chat:${chatId}:messages:update`
 
-  const { data, fetchNextPage, hasNextPage, isFetchingNextPage, status } = useChatQuery({
+  const { data, status } = useChatQuery({
     queryKey,
     apiUrl,
     paramKey,
     paramValue
+  })
+  useChatSocket({
+    queryKey,
+    addKey,
+    updateKey
   })
 
   if (status === 'pending') {
@@ -90,7 +98,6 @@ export default function ChatMessage({
                 timestamp={format(new Date(message.createdAt), DATE_FORMAT)}
                 socketUrl={socketUrl}
                 socketQuery={socketQuery}
-                queryKey={queryKey}
               />
             ))}
           </Fragment>

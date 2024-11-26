@@ -1,10 +1,10 @@
 import { useUser } from "@clerk/nextjs";
 import { zodResolver } from "@hookform/resolvers/zod"
 import { type Member, MemberRole } from "@prisma/client"
-import { useQueryClient } from "@tanstack/react-query";
 import axios from "axios";
 import { Edit, FileIcon, ShieldAlert, ShieldCheck, Trash } from "lucide-react"
 import Image from "next/image"
+import { useRouter } from "next/navigation";
 import qs from 'query-string';
 import { useEffect, useState } from "react"
 import { useForm } from "react-hook-form"
@@ -16,6 +16,7 @@ import { Form, FormControl, FormField, FormItem } from "@/components/ui/form"
 import { Input } from "@/components/ui/input"
 import MemberAvatar from "@/features/members/components/member-avatar"
 import { useConfirm } from "@/hooks/use-confirm";
+import { useServerId } from "@/hooks/use-server-id";
 import { cn } from "@/lib/utils"
 import { type MemberWithProfile } from "@/types"
 
@@ -32,7 +33,6 @@ interface ChatItemProps {
   isUpdated: boolean
   socketUrl: string // WebSocket 连接地址
   socketQuery: Record<string, string> // 用于 WebSocket 连接的查询参数
-  queryKey: string // 查询的唯一键
 }
 
 const roleIconMap = {
@@ -52,10 +52,10 @@ export default function ChatItem({
   currentMember,
   socketUrl,
   socketQuery,
-  queryKey
 }: ChatItemProps) {
   const { user } = useUser()
-  const queryClient = useQueryClient()
+  const router = useRouter()
+  const serverId = useServerId()
   const isFile = fileUrl && (content === 'pdf' || content === 'image')
 
   const isAdmin = currentMember.role === MemberRole.ADMIN
@@ -124,6 +124,11 @@ export default function ChatItem({
     }
   }
 
+  function onClickMember() {
+    if (member.id === currentMember.id) return
+    router.push(`/servers/${serverId}/conversations/${member.id}`)
+  }
+
   // 监听 esc 键
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -138,7 +143,7 @@ export default function ChatItem({
     <div className="relative group items-center flex w-full hover:bg-black/5 p-4 transition rounded-md">
       <MessageDeleteDialog />
       <div className="group flex gap-x-2 w-full">
-        <div className="cursor-pointer hover:drop-shadow-md transition">
+        <div onClick={onClickMember} className="cursor-pointer hover:drop-shadow-md transition">
           <MemberAvatar name={member.profile.name} imageUrl={member.profile.imageUrl} className="size-8" />
         </div>
         <div className="flex flex-col w-full">
