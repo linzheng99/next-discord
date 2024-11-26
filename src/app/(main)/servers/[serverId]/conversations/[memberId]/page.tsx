@@ -4,7 +4,7 @@ import { getOrCreateConversation } from "@/features/chat/queries"
 import { getCurrentMember } from "@/features/members/queries"
 import { getCurrentProfile } from "@/lib/current-profile"
 
-import ConversationIdClient from "./client"
+import MemberIdClient from "./client"
 
 interface MemberIdPageProps {
   params: Promise<{
@@ -31,7 +31,7 @@ export default async function MemberIdPage({ params }: MemberIdPageProps) {
 
 
   return (
-    <ConversationIdClient
+    <MemberIdClient
       profile={profile}
       conversation={conversation}
       otherMember={otherMember}

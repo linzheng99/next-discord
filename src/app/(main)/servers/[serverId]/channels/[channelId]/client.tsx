@@ -1,7 +1,9 @@
 "use client"
 
+import { ChannelType } from "@prisma/client"
 import { redirect } from "next/navigation"
 
+import MediaRoom from "@/components/media-room"
 import { useGetChannel } from "@/features/channels/api/use-get-channel"
 import ChatHeader from "@/features/chat/components/chat-header"
 import ChatInput from "@/features/chat/components/chat-input"
@@ -29,25 +31,43 @@ export default function ChannelIdClient({ profileId }: ChannelIdClientProps) {
   return (
     <div className="flex flex-1 h-full flex-col bg-white dark:bg-[#313338] overflow-hidden">
       <ChatHeader name={channel.name} type="channel" profileId={profileId} />
-      <div className="flex-1 flex flex-col h-full overflow-y-auto">
-        <ChatMessage
-          name={channel.name}
-          member={member as unknown as MemberWithProfile}
+      {channel.type === ChannelType.TEXT && (
+        <>
+          <div className="flex-1 flex flex-col h-full overflow-y-auto">
+            <ChatMessage
+              name={channel.name}
+              member={member as unknown as MemberWithProfile}
+              chatId={channelId}
+              apiUrl="/api/messages"
+              socketUrl="/api/socket/messages"
+              socketQuery={{ channelId, serverId }}
+              paramKey="channelId"
+              paramValue={channelId}
+              type="channel"
+            />
+          </div>
+          <ChatInput
+            name={channel.name}
+            type="channel"
+            apiUrl="/api/socket/messages"
+            query={{ channelId, serverId }}
+          />
+        </>
+      )}
+      {channel.type === ChannelType.AUDIO && (
+        <MediaRoom
           chatId={channelId}
-          apiUrl="/api/messages"
-          socketUrl="/api/socket/messages"
-          socketQuery={{ channelId, serverId }}
-          paramKey="channelId"
-          paramValue={channelId}
-          type="channel"
+          video={false}
+          audio={true}
         />
-      </div>
-      <ChatInput
-        name={channel.name}
-        type="channel"
-        apiUrl="/api/socket/messages"
-        query={{ channelId, serverId }}
-      />
+      )}
+      {channel.type === ChannelType.VIDEO && (
+        <MediaRoom
+          chatId={channelId}
+          video={true}
+          audio={true}
+        />
+      )}
     </div>
   )
 }

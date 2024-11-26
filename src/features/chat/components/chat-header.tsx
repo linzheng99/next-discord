@@ -4,6 +4,8 @@ import MobileToggle from "@/components/mobile-toggle"
 import MemberAvatar from "@/features/members/components/member-avatar"
 import { SocketIndicator } from "@/features/socket/components/socket-indicator"
 
+import ChatVideoButton from "./chat-video-button"
+
 interface ChatHeaderProps {
   name: string
   type: 'channel' | 'conversation'
@@ -30,6 +32,7 @@ export default function ChatHeader({ name, type, profileId, imageUrl }: ChatHead
         {name}
       </p>
       <div className="ml-auto flex items-center">
+        {type === 'conversation' && <ChatVideoButton />}
         <SocketIndicator />
       </div>
     </div>

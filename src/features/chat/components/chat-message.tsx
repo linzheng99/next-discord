@@ -1,6 +1,6 @@
 import { format } from "date-fns"
 import { Loader2, ServerCrash } from "lucide-react"
-import { type ElementRef, Fragment, useEffect, useRef } from "react"
+import { type ElementRef, Fragment, useRef } from "react"
 
 import { Button } from "@/components/ui/button"
 import { type MemberWithProfile } from "@/types"
@@ -62,10 +62,6 @@ export default function ChatMessage({
     loadMore: fetchNextPage,
     count: data?.pages[0].items.length ?? 0
   })
-
-  useEffect(() => {
-    console.log('data--------->', data)
-  }, [data])
 
   if (status === 'pending') {
     return (
