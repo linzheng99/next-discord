@@ -27,9 +27,9 @@ export default function ChannelIdClient({ profileId }: ChannelIdClientProps) {
   if (!channel || !member) return redirect('/')
 
   return (
-    <div className="flex min-h-screen flex-col bg-white dark:bg-[#313338]">
+    <div className="flex flex-1 h-full flex-col bg-white dark:bg-[#313338] overflow-hidden">
       <ChatHeader name={channel.name} type="channel" profileId={profileId} />
-      <div className="flex-1 flex flex-col">
+      <div className="flex-1 flex flex-col h-full overflow-y-auto">
         <ChatMessage
           name={channel.name}
           member={member as unknown as MemberWithProfile}

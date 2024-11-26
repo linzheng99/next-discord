@@ -14,7 +14,7 @@ export default function ServerIdJoinClient() {
   if (!initialValues) return <PageError message="Workspace not found" />
 
   return (
-    <div className="flex items-center justify-center min-h-screen w-full">
+    <div className="flex items-center justify-center h-full w-full">
       <div className="w-full md:max-w-lg px-4">
         <JoinServerForm initialValues={initialValues} />
       </div>

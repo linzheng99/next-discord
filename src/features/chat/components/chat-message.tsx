@@ -1,10 +1,12 @@
 import { format } from "date-fns"
 import { Loader2, ServerCrash } from "lucide-react"
-import { Fragment } from "react"
+import { type ElementRef, Fragment, useEffect, useRef } from "react"
 
+import { Button } from "@/components/ui/button"
 import { type MemberWithProfile } from "@/types"
 
 import useChatQuery from "../hooks/use-chat-query"
+import useChatScroll from "../hooks/use-chat-scroll"
 import useChatSocket from "../hooks/use-chat-socket"
 import { type MessageWithMemberWithProfile } from "../types"
 import ChatItem from "./chat-item"
@@ -39,7 +41,10 @@ export default function ChatMessage({
   const addKey = `chat:${chatId}:messages`
   const updateKey = `chat:${chatId}:messages:update`
 
-  const { data, status } = useChatQuery({
+  const chatRef = useRef<ElementRef<'div'>>(null)
+  const bottomRef = useRef<ElementRef<'div'>>(null)
+
+  const { data, status, fetchNextPage, hasNextPage, isFetchingNextPage } = useChatQuery({
     queryKey,
     apiUrl,
     paramKey,
@@ -50,6 +55,17 @@ export default function ChatMessage({
     addKey,
     updateKey
   })
+  useChatScroll({
+    chatRef,
+    bottomRef,
+    shouldLoadMore: !isFetchingNextPage && !!hasNextPage, // 是否还有更多历史消息可以加载
+    loadMore: fetchNextPage,
+    count: data?.pages[0].items.length ?? 0
+  })
+
+  useEffect(() => {
+    console.log('data--------->', data)
+  }, [data])
 
   if (status === 'pending') {
     return (
@@ -78,11 +94,33 @@ export default function ChatMessage({
   }
 
   return (
-    <div className="flex flex-1 h-full flex-col py-4 overflow-y-auto">
-      <div className="flex-1">
-      </div>
-      <ChatWelcome name={name} type={type} />
-      <div className="flex flex-col-reverse gap-y-4 p-4">
+    <div ref={chatRef} className="flex flex-col h-full overflow-y-auto">
+      {!hasNextPage && (
+        <div className="flex-1 flex">
+          <ChatWelcome name={name} type={type} />
+        </div>
+      )}
+      
+      {hasNextPage && (
+        <div className="px-4 pt-4">
+          {isFetchingNextPage ? (
+            <div className="text-xs text-zinc-500 dark:text-zinc-400 flex justify-center">
+              <Loader2 className="h-3 w-3 animate-spin text-zinc-500 dark:text-zinc-400" />
+            </div>
+          ) : (
+            <Button 
+              onClick={() => fetchNextPage()} 
+              variant="ghost" 
+              size="sm" 
+              className="w-full text-zinc-500 dark:text-zinc-400"
+            >
+              Load more
+            </Button>
+          )}
+        </div>
+      )}
+
+      <div className="flex-1 flex flex-col-reverse px-4 pb-4">
         {data?.pages.map((page, i) => (
           <Fragment key={i}>
             {page.items.map((message: MessageWithMemberWithProfile) => (
@@ -103,6 +141,7 @@ export default function ChatMessage({
           </Fragment>
         ))}
       </div>
+      <div ref={bottomRef} />
     </div>
   )
 }

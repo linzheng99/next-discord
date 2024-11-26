@@ -1,6 +1,7 @@
 import { useInfiniteQuery } from '@tanstack/react-query'
 import qs from 'query-string'
 
+
 interface UseChatQueryProps {
   queryKey: string // 查询的唯一键
   apiUrl: string // 获取 message 的 API 地址
@@ -40,7 +41,7 @@ export default function useChatQuery({ queryKey, apiUrl, paramKey, paramValue }:
     queryFn: ({ pageParam }) => fetchMessages({ pageParam }),
     // eslint-disable-next-line @typescript-eslint/no-unsafe-return
     getNextPageParam: (lastPage) => lastPage?.nextCursor,
-    initialPageParam: 0
+    initialPageParam: 0,
   })
 
   return {
